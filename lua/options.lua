@@ -77,7 +77,4 @@ vim.opt.confirm = true
 -- CopilotChat.nvim: Ensure completeopt is set for best autocompletion experience
 vim.opt.completeopt:append({ "noselect", "popup" })
 
--- Have to manually enable omnisharp:
-vim.lsp.enable("omnisharp")
-
 -- vim: ts=2 sts=2 sw=2 et
