@@ -1,0 +1,3 @@
+/home/chandler/repos/dotfiles/nvim/lua/plugins/snacks.lua:531:	pattern = "VeryLazy",
+/home/chandler/repos/dotfiles/nvim/lua/plugins/copilot.lua:8:	event = "VeryLazy",
+/home/chandler/repos/dotfiles/nvim/lua/plugins/neorg.lua:3:	lazy = false, -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default

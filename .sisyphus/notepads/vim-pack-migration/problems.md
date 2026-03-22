@@ -1,0 +1,2 @@
+2026-03-22: No additional blockers in Task 3 after scoping stale references to maintainer docs and applying minimal text updates.
+2026-03-22: Final Wave F3 executable QA remains unresolved in this environment because local `NVIM v0.11.6` is below the required floor; rerun evidence shows `Neovim >= 0.12 is required!`, `BAD_NVIM_VERSION`, and bootstrap failure at `lua/plugins/init.lua:67` (`attempt to index field 'pack' (a nil value)`), blocking reliable runtime stack/health validation until Neovim >= 0.12 is available.

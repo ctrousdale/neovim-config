@@ -1,0 +1,7 @@
+Error detected while processing /home/chandler/repos/dotfiles/nvim/init.lua:
+Neovim >= 0.12 is required!
+E5113: Error while calling lua chunk: /home/chandler/repos/dotfiles/nvim/lua/plugins/init.lua:67: attempt to index field 'pack' (a nil value)
+stack traceback:
+	/home/chandler/repos/dotfiles/nvim/lua/plugins/init.lua:67: in main chunk
+	[C]: in function 'require'
+	/home/chandler/repos/dotfiles/nvim/init.lua:16: in main chunk

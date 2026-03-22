@@ -1,0 +1,10 @@
+{
+  "active_plan": "/home/chandler/repos/dotfiles/nvim/.sisyphus/plans/vim-pack-migration.md",
+  "started_at": "2026-03-22T04:04:13.670Z",
+  "session_ids": [
+    "ses_2ec7522afffeZqkRDlZOk9BhcD"
+  ],
+  "plan_name": "vim-pack-migration",
+  "agent": "atlas",
+  "worktree_path": "/home/chandler/repos/dotfiles/nvim"
+}

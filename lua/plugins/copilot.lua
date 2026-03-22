@@ -5,7 +5,6 @@ return {
 		{ "github/copilot.vim" },
 		{ "nvim-lua/plenary.nvim", branch = "master" },
 	},
-	event = "VeryLazy",
 	-- build = "make tiktoken", -- Only on MacOS or Linux
 	opts = {
 		debug = false, -- Enable debug logging

@@ -1,11 +1,12 @@
-return {
-	"tiagovla/tokyodark.nvim",
-	opts = {
-		transparent_background = true,
-	},
-	config = function(_, opts)
-		require("tokyodark").setup(opts)
+local M = {}
 
-		vim.cmd.colorscheme("tokyodark")
-	end,
+M.settings = {
+	transparent_background = true,
 }
+
+function M.apply()
+	require("tokyodark").setup(M.settings)
+	vim.cmd.colorscheme("tokyodark")
+end
+
+return M

@@ -1,9 +1,6 @@
-return {
-	"folke/snacks.nvim",
-	priority = 1000,
-	lazy = false,
+local M = {
 	---@type snacks.Config
-	opts = {
+	settings = {
 		bigfile = { enabled = true },
 		dashboard = { enabled = true },
 		explorer = {
@@ -41,7 +38,7 @@ return {
 			},
 		},
 	},
-	keys = {
+	mappings = {
 		-- Top Pickers & Explorer
 		{
 			"<leader><space>",
@@ -528,36 +525,59 @@ return {
 			end,
 		},
 	},
-	init = function()
-		vim.api.nvim_create_autocmd("User", {
-			pattern = "VeryLazy",
-			callback = function()
-				-- Setup some globals for debugging (lazy-loaded)
-				_G.dd = function(...)
-					Snacks.debug.inspect(...)
-				end
-				_G.bt = function()
-					Snacks.debug.backtrace()
-				end
-				vim.print = _G.dd -- Override print to use snacks for `:=` command
-
-				-- Create some toggle mappings
-				Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
-				Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
-				Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
-				Snacks.toggle.diagnostics():map("<leader>ud")
-				Snacks.toggle.line_number():map("<leader>ul")
-				Snacks.toggle
-					.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 })
-					:map("<leader>uc")
-				Snacks.toggle.treesitter():map("<leader>uT")
-				Snacks.toggle
-					.option("background", { off = "light", on = "dark", name = "Dark Background" })
-					:map("<leader>ub")
-				Snacks.toggle.inlay_hints():map("<leader>uh")
-				Snacks.toggle.indent():map("<leader>ug")
-				Snacks.toggle.dim():map("<leader>uD")
-			end,
-		})
-	end,
 }
+
+local function setup_debug_and_toggles()
+	_G.dd = function(...)
+		Snacks.debug.inspect(...)
+	end
+	_G.bt = function()
+		Snacks.debug.backtrace()
+	end
+	vim.print = _G.dd
+
+	Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
+	Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
+	Snacks.toggle.option("relativenumber", { name = "Relative Number" }):map("<leader>uL")
+	Snacks.toggle.diagnostics():map("<leader>ud")
+	Snacks.toggle.line_number():map("<leader>ul")
+	Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map("<leader>uc")
+	Snacks.toggle.treesitter():map("<leader>uT")
+	Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
+	Snacks.toggle.inlay_hints():map("<leader>uh")
+	Snacks.toggle.indent():map("<leader>ug")
+	Snacks.toggle.dim():map("<leader>uD")
+end
+
+local function snacks_ready()
+	local snacks = _G.Snacks
+	return snacks
+		and snacks.debug
+		and snacks.toggle
+		and snacks.toggle.option
+		and snacks.toggle.diagnostics
+		and snacks.toggle.line_number
+		and snacks.toggle.treesitter
+		and snacks.toggle.inlay_hints
+		and snacks.toggle.indent
+		and snacks.toggle.dim
+end
+
+local function schedule_setup_debug_and_toggles(retries)
+	if snacks_ready() then
+		setup_debug_and_toggles()
+		return
+	end
+	if retries <= 0 then
+		return
+	end
+	vim.defer_fn(function()
+		schedule_setup_debug_and_toggles(retries - 1)
+	end, 20)
+end
+
+vim.schedule(function()
+	schedule_setup_debug_and_toggles(50)
+end)
+
+return M

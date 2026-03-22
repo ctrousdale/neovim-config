@@ -1,7 +1,9 @@
-return {
-  'windwp/nvim-autopairs',
-  event = 'InsertEnter',
-  config = true,
-  -- use opts = {} for passing setup options
-  -- this is equivalent to setup({}) function
-}
+local M = {}
+
+M.settings = {}
+
+function M.setup()
+	require("nvim-autopairs").setup(M.settings)
+end
+
+return M

@@ -1,21 +1,6 @@
-return {
-	-- Main LSP Configuration
-	"neovim/nvim-lspconfig",
-	dependencies = {
-		-- Automatically install LSPs and related tools to stdpath for Neovim
-		-- Mason must be loaded before its dependents so we need to set it up here.
-		-- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-		{ "williamboman/mason.nvim", opts = {} },
-		"williamboman/mason-lspconfig.nvim",
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
+local M = {}
 
-		-- Useful status updates for LSP.
-		{ "j-hui/fidget.nvim", opts = {} },
-
-		-- Allows extra capabilities provided by blink.cmp
-		"saghen/blink.cmp",
-	},
-	config = function()
+function M.config()
 		-- Brief aside: **What is LSP?**
 		--
 		-- LSP is an initialism you've probably heard, but might not understand what it is.
@@ -198,7 +183,6 @@ return {
 		--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 		--
 		--  Add any additional override configuration in the following tables. Available keys are:
-		--  - cmd (table): Override the default command used to start the server
 		--  - filetypes (table): Override the default list of associated filetypes for the server
 		--  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
 		--  - settings (table): Override the default settings passed when initializing the server.
@@ -219,14 +203,12 @@ return {
 			bashls = {},
 			tailwindcss = {},
 			omnisharp = {
-				-- cmd = { "OmniSharp" },
-				cmd = { "OmniSharp" },
+				["cmd"] = { "OmniSharp" },
 				filetypes = { "cs", "vb" },
 				capabilities = capabilities,
 			},
 			nil_ls = {},
 			lua_ls = {
-				-- cmd = { ... },
 				-- filetypes = { ... },
 				-- capabilities = {},
 				settings = {
@@ -281,5 +263,6 @@ return {
 				require("lspconfig")[server_name].setup(server_config)
 			end
 		end
-	end,
-}
+	end
+
+return M

@@ -1,6 +1,6 @@
-return { -- Collection of various small independent plugins/modules
-	"echasnovski/mini.nvim",
-	config = function()
+local M = {}
+
+function M.config()
 		-- Better Around/Inside textobjects
 		--
 		-- Examples:
@@ -37,5 +37,6 @@ return { -- Collection of various small independent plugins/modules
 
 		-- ... and there is more!
 		--  Check out: https://github.com/echasnovski/mini.nvim
-	end,
-}
+	end
+
+return M

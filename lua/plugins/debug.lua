@@ -6,25 +6,8 @@
 -- be extended to other languages as well. That's why it's called
 -- kickstart.nvim and not kitchen-sink.nvim ;)
 
-return {
-  -- NOTE: Yes, you can install new plugins here!
-  'mfussenegger/nvim-dap',
-  -- NOTE: And you can specify dependencies as well
-  dependencies = {
-    -- Creates a beautiful debugger UI
-    'rcarriga/nvim-dap-ui',
-
-    -- Required dependency for nvim-dap-ui
-    'nvim-neotest/nvim-nio',
-
-    -- Installs the debug adapters for you
-    'williamboman/mason.nvim',
-    'jay-babu/mason-nvim-dap.nvim',
-
-    -- Add your own debuggers here
-    'leoluz/nvim-dap-go',
-  },
-  keys = {
+local M = {
+  mappings = {
     -- Basic debugging keymaps, feel free to change to your liking!
     {
       '<F5>',
@@ -77,7 +60,9 @@ return {
       desc = 'Debug: See last session result.',
     },
   },
-  config = function()
+}
+
+function M.activate()
     local dap = require 'dap'
     local dapui = require 'dapui'
 
@@ -144,5 +129,6 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
-  end,
-}
+end
+
+return M

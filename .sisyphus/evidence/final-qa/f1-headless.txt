@@ -1,0 +1,9 @@
+Error detected while processing /home/chandler/repos/dotfiles/nvim/init.lua:
+Neovim >= 0.12 is required!
+E5113: Error while calling lua chunk: /home/chandler/repos/dotfiles/nvim/lua/lazy-plugins.lua:5: vim.pack.add requires Neovim 0.12+
+stack traceback:
+	[C]: in function 'error'
+	/home/chandler/repos/dotfiles/nvim/lua/lazy-plugins.lua:5: in function 'add'
+	/home/chandler/repos/dotfiles/nvim/lua/plugins/init.lua:67: in main chunk
+	[C]: in function 'require'
+	/home/chandler/repos/dotfiles/nvim/init.lua:16: in main chunk

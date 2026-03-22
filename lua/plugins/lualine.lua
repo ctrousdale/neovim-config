@@ -1,9 +1,6 @@
 return {
-	"nvim-lualine/lualine.nvim",
-	dependencies = { "nvim-tree/nvim-web-devicons" },
-	opts = function(_, opts)
-		local trouble = require("trouble")
-		local symbols = trouble.statusline({
+	build_settings = function()
+		require("trouble").statusline({
 			mode = "lsp_document_symbols",
 			groups = {},
 			title = false,

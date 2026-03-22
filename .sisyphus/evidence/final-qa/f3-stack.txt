@@ -1,0 +1,18 @@
+Error detected while processing /home/chandler/repos/dotfiles/nvim/init.lua:
+Neovim >= 0.12 is required!
+E5113: Error while calling lua chunk: /home/chandler/repos/dotfiles/nvim/lua/lazy-plugins.lua:5: vim.pack.add requires Neovim 0.12+
+stack traceback:
+	[C]: in function 'error'
+	/home/chandler/repos/dotfiles/nvim/lua/lazy-plugins.lua:5: in function 'add'
+	/home/chandler/repos/dotfiles/nvim/lua/plugins/init.lua:67: in main chunk
+	[C]: in function 'require'
+	/home/chandler/repos/dotfiles/nvim/init.lua:16: in main chunk
+Error detected while processing command line:
+E5108: Error executing lua [string ":lua"]:1: module 'snacks' not found:
+	no field package.preload['snacks']
+	no file '/nix/store/bb83izkrw2b8cklqj8xm15qshb98gdi8-luajit-2.1.1741730670-env/share/lua/5.1/snacks.lua'
+	no file '/nix/store/bb83izkrw2b8cklqj8xm15qshb98gdi8-luajit-2.1.1741730670-env/share/lua/5.1/snacks/init.lua'
+	no file '/nix/store/bb83izkrw2b8cklqj8xm15qshb98gdi8-luajit-2.1.1741730670-env/lib/lua/5.1/snacks.so'
+stack traceback:
+	[C]: in function 'require'
+	[string ":lua"]:1: in main chunk

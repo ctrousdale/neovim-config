@@ -1,22 +1,21 @@
-return { -- Autoformat
-	"stevearc/conform.nvim",
-	event = { "BufWritePre" },
-	cmd = { "ConformInfo" },
-	keys = {
-		{
-			"<leader>f",
-			function()
-				require("conform").format({
-					async = true,
-					lsp_format = "fallback",
-					timeout_ms = 3000,
-				})
-			end,
-			mode = "",
-			desc = "[F]ormat buffer",
-		},
+local M = {}
+
+M.mappings = {
+	{
+		"<leader>f",
+		function()
+			require("conform").format({
+				async = true,
+				lsp_format = "fallback",
+				timeout_ms = 3000,
+			})
+		end,
+		mode = "",
+		desc = "[F]ormat buffer",
 	},
-	opts = {
+}
+
+M.settings = {
 		notify_on_error = true,
 		format_on_save = function(bufnr)
 			-- Disable "format_on_save lsp_fallback" for languages that don't
@@ -47,5 +46,6 @@ return { -- Autoformat
 			nix = { "alejandra" },
 			cs = { "csharpier" },
 		},
-	},
 }
+
+return M
