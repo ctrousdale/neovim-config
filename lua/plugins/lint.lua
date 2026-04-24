@@ -5,6 +5,7 @@ return {
 		event = { "BufReadPre", "BufNewFile" },
 		config = function()
 			local lint = require("lint")
+			local lint_events = { "BufWritePost", "InsertLeave" }
 			-- lint.linters_by_ft = {
 			--   markdown = { 'markdownlint' },
 			-- }
@@ -43,10 +44,8 @@ return {
 			-- lint.linters_by_ft['terraform'] = nil
 			-- lint.linters_by_ft['text'] = nil
 
-			-- Create autocommand which carries out the actual linting
-			-- on the specified events.
 			local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
-			vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+			vim.api.nvim_create_autocmd(lint_events, {
 				group = lint_augroup,
 				callback = function()
 					-- Only run the linter in buffers that you can modify in order to

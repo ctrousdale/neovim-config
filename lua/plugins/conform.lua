@@ -12,7 +12,7 @@ return { -- Autoformat
 					timeout_ms = 3000,
 				})
 			end,
-			mode = "",
+			mode = { "n", "v" },
 			desc = "[F]ormat buffer",
 		},
 	},

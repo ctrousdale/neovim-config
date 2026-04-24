@@ -16,7 +16,7 @@ vim.opt.mouse = "a"
 vim.opt.showmode = false
 
 -- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
+--  Schedule the setting on the next event-loop tick to avoid startup impact.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
@@ -66,7 +66,6 @@ vim.opt.scrolloff = 3
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 
--- Disable commandline command autocomplete due to poor performance on WSL2
 -- vim.api.nvim_create_autocmd('CmdlineEnter', {
 --   pattern = '!',
 --   callback = function()
