@@ -8,6 +8,6 @@ mkdir -p "$HOME/.config"
 rm -rf "$HOME/.config/nvim"
 ln -sfn "$DOTFILES_DIR" "$HOME/.config/nvim"
 
-if command -v nvim >/dev/null 2>&1; then
-  nvim --headless '+Lazy! sync' +qa || true
-fi
+# if command -v nvim >/dev/null 2>&1; then
+#   nvim --headless '+Lazy! sync' +qa || true
+# fi
