@@ -12,7 +12,7 @@ return {
 		"ZkTags",
 	},
 	opts = {
-		picker = "select",
+		picker = "snacks_picker",
 	},
 	config = function(_, opts)
 		require("zk").setup(opts)

@@ -37,6 +37,7 @@ return {
 			},
 		},
 		spec = {
+			{ "<leader>c", group = "[C]ode" },
 			{ "<leader>n", group = "[N]otes" },
 			{ "<leader>s", group = "[S]earch" },
 			{ "<leader>t", group = "[T]oggle" },
