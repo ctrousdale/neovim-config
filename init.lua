@@ -1,7 +1,12 @@
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-local config_root = vim.fn.fnamemodify(vim.env.MYVIMRC, ':p:h')
+local init_path = vim.env.MYVIMRC
+if not init_path or init_path == '' then
+	init_path = debug.getinfo(1, 'S').source:sub(2)
+end
+
+local config_root = vim.fn.fnamemodify(init_path, ':p:h')
 if config_root ~= '' then
 	vim.opt.rtp:prepend(config_root)
 	package.path = config_root .. '/lua/?.lua;' .. config_root .. '/lua/?/init.lua;' .. package.path
