@@ -1,21 +1,29 @@
 local M = {}
 
-local function get_roslyn_cmd()
-	if vim.fn.executable("Microsoft.CodeAnalysis.LanguageServer") == 1 then
-		return { "Microsoft.CodeAnalysis.LanguageServer", "--stdio" }
-	end
-
-	return { "roslyn-language-server", "--stdio" }
+local function get_roslyn_log_dir()
+	return vim.fs.joinpath(vim.uv.os_tmpdir(), "roslyn_ls/logs")
 end
 
-local function find_roslyn_root(fname)
-	local path = type(fname) == "number" and vim.api.nvim_buf_get_name(fname) or fname
-	local start = vim.fs.dirname(path)
-	local project_file = vim.fs.find(function(name)
-		return name:match("%.slnx?$") or name:match("%.csproj$")
-	end, { path = start, upward = true })[1]
+local function get_roslyn_cmd()
+	if vim.fn.executable("Microsoft.CodeAnalysis.LanguageServer") == 1 then
+		return {
+			"Microsoft.CodeAnalysis.LanguageServer",
+			"--logLevel",
+			"Information",
+			"--extensionLogDirectory",
+			get_roslyn_log_dir(),
+			"--stdio",
+		}
+	end
 
-	return project_file and vim.fs.dirname(project_file) or nil
+	return {
+		"roslyn-language-server",
+		"--logLevel",
+		"Information",
+		"--extensionLogDirectory",
+		get_roslyn_log_dir(),
+		"--stdio",
+	}
 end
 
 function M.get(capabilities)
@@ -24,9 +32,7 @@ function M.get(capabilities)
 		tailwindcss = {},
 		roslyn_ls = {
 			cmd = get_roslyn_cmd(),
-			filetypes = { "cs" },
 			capabilities = capabilities,
-			root_dir = find_roslyn_root,
 		},
 		nil_ls = {},
 		lua_ls = {
