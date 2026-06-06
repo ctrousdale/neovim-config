@@ -29,6 +29,8 @@ end
 function M.get(capabilities)
 	return {
 		bashls = {},
+		docker_language_server = {},
+		docker_compose_language_service = {},
 		tailwindcss = {},
 		roslyn_ls = {
 			cmd = get_roslyn_cmd(),
