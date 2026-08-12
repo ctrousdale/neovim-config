@@ -3,7 +3,9 @@ local languages_dir = vim.fn.stdpath("config") .. "/lua/config/languages"
 
 for name, type in vim.fs.dir(languages_dir) do
 	local module_name = name:match("^(.*)%.lua$")
-	if type == "file" and module_name and module_name ~= "init" and module_name ~= "types" then
+	-- Home Manager deploys this directory as symlinks, which vim.fs.dir reports as
+	-- "link" rather than "file".
+	if (type == "file" or type == "link") and module_name and module_name ~= "init" and module_name ~= "types" then
 		table.insert(language_modules, "config.languages." .. module_name)
 	end
 end
