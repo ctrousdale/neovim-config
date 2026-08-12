@@ -11,11 +11,14 @@ Lua modules for options, keymaps, startup validation, and plugin configuration.
  ├── options.lua
  ├── keymaps.lua
  ├── startup-validation.lua
+ ├── config/    # Implementations delegated from plugin specs
  └── plugins/
 ```
 
 ## Start Here
-- Large configs: `nvim/lua/plugins/nvim-lspconfig.lua`, `nvim/lua/plugins/snacks.lua`
+- Plugin specs: `nvim/lua/plugins/` is auto-imported by `lazy-plugins.lua` using `{ import = "plugins" }`.
+- LSP implementation: `nvim/lua/config/lsp/{attach,diagnostics,servers}.lua`.
+- Snacks implementation: `nvim/lua/config/snacks/{init,options,keys}.lua`.
 
 ## Notes
-Add new plugin configuration files under `nvim/lua/plugins/` and reference them from `lazy-plugins.lua`.
+Add plugin specs under `nvim/lua/plugins/`; do not manually register individual files in `lazy-plugins.lua`.

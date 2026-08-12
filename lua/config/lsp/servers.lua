@@ -1,52 +1,7 @@
 local M = {}
 
-local function get_roslyn_log_dir()
-	return vim.fs.joinpath(vim.uv.os_tmpdir(), "roslyn_ls/logs")
-end
-
-local function get_roslyn_cmd()
-	if vim.fn.executable("Microsoft.CodeAnalysis.LanguageServer") == 1 then
-		return {
-			"Microsoft.CodeAnalysis.LanguageServer",
-			"--logLevel",
-			"Information",
-			"--extensionLogDirectory",
-			get_roslyn_log_dir(),
-			"--stdio",
-		}
-	end
-
-	return {
-		"roslyn-language-server",
-		"--logLevel",
-		"Information",
-		"--extensionLogDirectory",
-		get_roslyn_log_dir(),
-		"--stdio",
-	}
-end
-
-function M.get(capabilities)
-	return {
-		bashls = {},
-		docker_language_server = {},
-		docker_compose_language_service = {},
-		tailwindcss = {},
-		roslyn_ls = {
-			cmd = get_roslyn_cmd(),
-			capabilities = capabilities,
-		},
-		nil_ls = {},
-		lua_ls = {
-			settings = {
-				Lua = {
-					completion = {
-						callSnippet = "Replace",
-					},
-				},
-			},
-		},
-	}
+function M.get()
+	return require("config.languages").lsp
 end
 
 local function setup_mason()
@@ -59,7 +14,7 @@ local function setup_mason()
 end
 
 function M.setup(capabilities)
-	local servers = M.get(capabilities)
+	local servers = M.get()
 
 	setup_mason()
 

@@ -5,6 +5,7 @@ return {
 		event = { "BufReadPre", "BufNewFile" },
 		config = function()
 			local lint = require("lint")
+			local languages = require("config.languages")
 			local lint_events = { "BufWritePost", "InsertLeave" }
 			-- lint.linters_by_ft = {
 			--   markdown = { 'markdownlint' },
@@ -13,8 +14,9 @@ return {
 			-- To allow other plugins to add linters to require('lint').linters_by_ft,
 			-- instead set linters_by_ft like this:
 			lint.linters_by_ft = lint.linters_by_ft or {}
-			lint.linters_by_ft["markdown"] = { "markdownlint" }
-			lint.linters_by_ft["sh"] = { "shellcheck" }
+			for filetype, linters in pairs(languages.linters) do
+				lint.linters_by_ft[filetype] = linters
+			end
 
 			--
 			-- However, note that this will enable a set of default linters,

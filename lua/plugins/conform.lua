@@ -1,3 +1,5 @@
+local languages = require("config.languages")
+
 return { -- Autoformat
 	"stevearc/conform.nvim",
 	event = { "BufWritePre" },
@@ -32,20 +34,6 @@ return { -- Autoformat
 				}
 			end
 		end,
-		formatters_by_ft = {
-			lua = { "stylua" },
-			javascript = { "prettierd", "prettier" },
-			javascriptreact = { "prettierd", "prettier" },
-			typescript = { "prettierd", "prettier" },
-			typescriptreact = { "prettierd", "prettier" },
-			json = { "prettierd", "prettier" },
-			jsonc = { "prettierd", "prettier" },
-			html = { "prettierd", "prettier" },
-			css = { "prettierd", "prettier" },
-			sh = { "beautysh" },
-			markdown = { "prettierd", "prettier" },
-			nix = { "alejandra" },
-			cs = { "csharpier" },
-		},
+		formatters_by_ft = languages.formatters,
 	},
 }
