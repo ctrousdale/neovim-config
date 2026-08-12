@@ -26,6 +26,26 @@ return {
 			end,
 			desc = "[N]otes [N]ew",
 		},
+		{
+			"<leader>nd",
+			function()
+				local notebook_path = require("zk.util").resolve_notebook_path(0)
+				local notebook_root = notebook_path and require("zk.util").notebook_root(notebook_path)
+				if not notebook_root then
+					vim.notify("No zk notebook found", vim.log.levels.ERROR)
+					return
+				end
+
+				local daily_dir = vim.fs.joinpath(notebook_root, "daily")
+				local daily_note = vim.fs.joinpath(daily_dir, vim.fn.strftime("%Y-%m-%d") .. ".md")
+				vim.fn.mkdir(daily_dir, "p")
+				if vim.fn.filereadable(daily_note) == 0 then
+					vim.fn.writefile({}, daily_note)
+				end
+				vim.cmd.edit(vim.fn.fnameescape(daily_note))
+			end,
+			desc = "[N]otes [D]aily",
+		},
 		{ "<leader>no", "<Cmd>ZkNotes { sort = { 'modified' } }<CR>", desc = "[N]otes [O]pen" },
 		{
 			"<leader>nf",
