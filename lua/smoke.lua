@@ -214,10 +214,21 @@ local function assert_lsp_servers(errors)
 	}
 
 	assert_exact_set(servers, expected_servers, "LSP server set", errors)
-	for _, server_name in ipairs({ "bashls", "docker_language_server", "docker_compose_language_service", "tailwindcss", "nil_ls" }) do
+	for _, server_name in ipairs({ "bashls", "docker_language_server", "docker_compose_language_service", "nil_ls" }) do
 		if next(servers[server_name] or {}) ~= nil then
 			append_error(errors, ("%s must use its empty default configuration"):format(server_name))
 		end
+	end
+
+	local tailwindcss = servers.tailwindcss or {}
+	local expected_tailwind_filetypes = { "css", "html", "javascript", "javascriptreact", "typescript", "typescriptreact" }
+	local tailwind_filetypes_ok, tailwind_filetypes_message = M.compare_ordered_formatters(
+		expected_tailwind_filetypes,
+		tailwindcss.filetypes,
+		"Tailwind CSS filetypes"
+	)
+	if not tailwind_filetypes_ok then
+		append_error(errors, tailwind_filetypes_message)
 	end
 
 	local roslyn = servers.roslyn_ls or {}

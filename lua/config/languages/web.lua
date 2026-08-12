@@ -3,7 +3,16 @@ require("config.languages.types")
 ---@type LanguageConfig
 local language = {
 	lsp = {
-		tailwindcss = {},
+		tailwindcss = {
+			filetypes = {
+				"css",
+				"html",
+				"javascript",
+				"javascriptreact",
+				"typescript",
+				"typescriptreact",
+			},
+		},
 	},
 	formatters = {
 		css = { "prettierd", "prettier" },
