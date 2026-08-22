@@ -3,7 +3,7 @@ require("config.languages.types")
 ---@type LanguageConfig
 local language = {
 	lsp = {
-		nil_ls = {},
+		nixd = {},
 	},
 	formatters = {
 		nix = { "alejandra" },

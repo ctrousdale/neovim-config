@@ -157,6 +157,7 @@ local function assert_formatters(errors)
 		markdown = { "prettierd", "prettier" },
 		nix = { "alejandra" },
 		cs = { "csharpier" },
+		typst = { "typstyle" },
 	}
 	local conform = require("plugins.conform")
 	local options = conform.opts
@@ -165,13 +166,35 @@ local function assert_formatters(errors)
 	assert_exact_set(options.formatters_by_ft, expected, "formatters_by_ft", errors)
 	assert_exact_set(options.formatters_by_ft, languages.formatters, "Conform registry formatter parity", errors)
 	for filetype, expected_formatters in pairs(expected) do
-		local ok, message = M.compare_ordered_formatters(
-			expected_formatters,
-			options.formatters_by_ft[filetype],
-			filetype
-		)
-		if not ok then
-			append_error(errors, message)
+		if filetype == "nix" then
+			if type(options.formatters_by_ft.nix) ~= "function" then
+				append_error(errors, "formatter selection for nix must guard generated hardware configurations")
+			else
+				local ordinary_buffer = vim.api.nvim_create_buf(false, true)
+				local generated_buffer = vim.api.nvim_create_buf(false, true)
+				vim.api.nvim_buf_set_name(ordinary_buffer, "/tmp/home/common.nix")
+				vim.api.nvim_buf_set_name(generated_buffer, "/tmp/nixos/system/test/hardware-configuration.nix")
+
+				local ok, message = M.compare_ordered_formatters(expected_formatters, options.formatters_by_ft.nix(ordinary_buffer), filetype)
+				if not ok then
+					append_error(errors, message)
+				end
+				if #options.formatters_by_ft.nix(generated_buffer) ~= 0 then
+					append_error(errors, "generated hardware configurations must not have a Nix formatter")
+				end
+
+				vim.api.nvim_buf_delete(ordinary_buffer, { force = true })
+				vim.api.nvim_buf_delete(generated_buffer, { force = true })
+			end
+		else
+			local ok, message = M.compare_ordered_formatters(
+				expected_formatters,
+				options.formatters_by_ft[filetype],
+				filetype
+			)
+			if not ok then
+				append_error(errors, message)
+			end
 		end
 	end
 
@@ -199,6 +222,14 @@ local function assert_formatters(errors)
 		append_error(errors, "format_on_save must retain the 3000ms LSP fallback policy for enabled filetypes")
 	end
 	vim.bo.filetype = original_filetype
+
+	local generated_buffer = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_buf_set_name(generated_buffer, "/tmp/nixos/system/test/hardware-configuration.nix")
+	vim.bo[generated_buffer].filetype = "nix"
+	if options.format_on_save(generated_buffer) ~= nil then
+		append_error(errors, "format_on_save must be disabled for generated hardware configurations")
+	end
+	vim.api.nvim_buf_delete(generated_buffer, { force = true })
 end
 
 local function assert_lsp_servers(errors)
@@ -209,12 +240,13 @@ local function assert_lsp_servers(errors)
 		docker_compose_language_service = true,
 		tailwindcss = true,
 		roslyn_ls = true,
-		nil_ls = true,
+		nixd = true,
+		tinymist = true,
 		lua_ls = true,
 	}
 
 	assert_exact_set(servers, expected_servers, "LSP server set", errors)
-	for _, server_name in ipairs({ "bashls", "docker_language_server", "docker_compose_language_service", "nil_ls" }) do
+	for _, server_name in ipairs({ "bashls", "docker_language_server", "docker_compose_language_service", "nixd" }) do
 		if next(servers[server_name] or {}) ~= nil then
 			append_error(errors, ("%s must use its empty default configuration"):format(server_name))
 		end
@@ -325,8 +357,9 @@ local function assert_lsp_setup_branch(errors, modern)
 		docker_compose_language_service = true,
 		tailwindcss = true,
 		roslyn_ls = true,
-		nil_ls = true,
+		nixd = true,
 		lua_ls = true,
+		tinymist = true,
 	}
 	assert_exact_set(calls, expected_servers, branch_name .. " LSP setup server set", errors)
 	for server_name in pairs(expected_servers) do
