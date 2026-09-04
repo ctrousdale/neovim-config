@@ -157,6 +157,7 @@ local function assert_formatters(errors)
 		markdown = { "prettierd", "prettier" },
 		nix = { "alejandra" },
 		cs = { "csharpier" },
+		python = { "ruff_format" },
 		typst = { "typstyle" },
 	}
 	local conform = require("plugins.conform")
@@ -240,13 +241,14 @@ local function assert_lsp_servers(errors)
 		docker_compose_language_service = true,
 		tailwindcss = true,
 		roslyn_ls = true,
+		basedpyright = true,
 		nixd = true,
 		tinymist = true,
 		lua_ls = true,
 	}
 
 	assert_exact_set(servers, expected_servers, "LSP server set", errors)
-	for _, server_name in ipairs({ "bashls", "docker_language_server", "docker_compose_language_service", "nixd" }) do
+	for _, server_name in ipairs({ "bashls", "basedpyright", "docker_language_server", "docker_compose_language_service", "nixd" }) do
 		if next(servers[server_name] or {}) ~= nil then
 			append_error(errors, ("%s must use its empty default configuration"):format(server_name))
 		end
@@ -353,6 +355,7 @@ local function assert_lsp_setup_branch(errors, modern)
 	local calls = modern and configured or legacy_setups
 	local expected_servers = {
 		bashls = true,
+		basedpyright = true,
 		docker_language_server = true,
 		docker_compose_language_service = true,
 		tailwindcss = true,
@@ -440,12 +443,16 @@ local function assert_lint_policy(errors)
 
 	local markdown_ok, markdown_message = M.compare_ordered_formatters({ "markdownlint" }, mock_lint.linters_by_ft.markdown, "markdown linters")
 	local shell_ok, shell_message = M.compare_ordered_formatters({ "shellcheck" }, mock_lint.linters_by_ft.sh, "shell linters")
+	local python_ok, python_message = M.compare_ordered_formatters({ "ruff" }, mock_lint.linters_by_ft.python, "Python linters")
 	local languages = require("config.languages")
 	if not markdown_ok then
 		append_error(errors, markdown_message)
 	end
 	if not shell_ok then
 		append_error(errors, shell_message)
+	end
+	if not python_ok then
+		append_error(errors, python_message)
 	end
 	for filetype, expected_linters in pairs(languages.linters) do
 		local linters_ok, linters_message = M.compare_ordered_formatters(
@@ -475,6 +482,35 @@ local function assert_lint_policy(errors)
 
 	if mock_lint.runs ~= 1 then
 		append_error(errors, "lint callback must run only for modifiable buffers")
+	end
+end
+
+local function assert_python_debugger(errors)
+	local spec = require("plugins.dap-python")
+	if spec[1] ~= "mfussenegger/nvim-dap-python" or spec.ft ~= "python" then
+		append_error(errors, "Python debugger must load nvim-dap-python for Python buffers")
+	end
+
+	local dependencies_ok, dependencies_message =
+		M.compare_ordered_formatters({ "mfussenegger/nvim-dap" }, spec.dependencies, "Python debugger dependencies")
+	if not dependencies_ok then
+		append_error(errors, dependencies_message)
+	end
+
+	local original_dap_python = package.loaded["dap-python"]
+	local adapter
+	package.loaded["dap-python"] = {
+		setup = function(command)
+			adapter = command
+		end,
+	}
+	local ok, message = xpcall(spec.config, debug.traceback)
+	package.loaded["dap-python"] = original_dap_python
+
+	if not ok then
+		append_error(errors, "Python debugger configuration could not be characterized: " .. message)
+	elseif adapter ~= "debugpy-adapter" then
+		append_error(errors, "Python debugger must use the system debugpy-adapter executable")
 	end
 end
 
@@ -520,6 +556,7 @@ function M.assert_language_tooling_contract(opts)
 	assert_lsp_setup_compatibility(violations)
 	assert_formatters(violations)
 	assert_lint_policy(violations)
+	assert_python_debugger(violations)
 	assert_docker_filetypes(violations)
 
 	return report(violations, strict)
