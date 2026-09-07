@@ -1,11 +1,7 @@
 local M = {}
 
 local function client_supports_method(client, method, bufnr)
-	if vim.fn.has("nvim-0.11") == 1 then
-		return client:supports_method(method, bufnr)
-	end
-
-	return client.supports_method(method, { bufnr = bufnr })
+	return client:supports_method(method, bufnr)
 end
 
 local function setup_document_highlight(client, event)

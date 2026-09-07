@@ -8,10 +8,10 @@
 local check_version = function()
 	local verstr = tostring(vim.version())
 	local v = vim.version()
-	if v.major > 0 or (v.major == 0 and v.minor >= 11) then
+	if v.major > 0 or (v.major == 0 and v.minor >= 12) then
 		vim.health.ok(string.format("Neovim version is: '%s'", verstr))
 	else
-		vim.health.error(string.format("Neovim >= 0.11 is required. Current: '%s'", verstr))
+		vim.health.error(string.format("Neovim >= 0.12 is required. Current: '%s'", verstr))
 	end
 end
 

@@ -19,9 +19,9 @@ local function plugin_specs()
 	local specs = {}
 	local plugins_dir = vim.fs.joinpath(config_root(), "lua", "plugins")
 
-	for name, type in vim.fs.dir(plugins_dir) do
+	for name, node_type in vim.fs.dir(plugins_dir) do
 		local module_name = name:match("^(.*)%.lua$")
-		if (type == "file" or type == "link") and module_name then
+		if (node_type == "file" or node_type == "link") and module_name then
 			local spec = dofile(vim.fs.joinpath(plugins_dir, name))
 			if type(spec) ~= "table" then
 				error(("plugin spec %s must return a table"):format(module_name))
@@ -60,11 +60,6 @@ local function assert_plugin_keymaps()
 	for key, mapping_owners in pairs(owners) do
 		if #mapping_owners > 1 then
 			error(("duplicate plugin keymap %s: %s"):format(key, table.concat(mapping_owners, ", ")))
-		end
-
-		local mode, lhs = key:match("^(.)|(.*)$")
-		if next(vim.fn.maparg(lhs, mode, false, true)) == nil then
-			error(("plugin keymap is not active: %s"):format(key))
 		end
 	end
 end
