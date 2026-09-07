@@ -4,19 +4,8 @@ function M.get()
 	return require("config.languages").lsp
 end
 
-local function setup_mason()
-	require("mason-tool-installer").setup({})
-	require("mason-lspconfig").setup({
-		ensure_installed = {},
-		automatic_installation = false,
-		automatic_enable = false,
-	})
-end
-
 function M.setup(capabilities)
 	local servers = M.get()
-
-	setup_mason()
 
 	for server_name, server in pairs(servers) do
 		local server_config = vim.deepcopy(server)

@@ -40,6 +40,7 @@ return {
 			{ "<leader>c", group = "[C]ode" },
 			{ "<leader>n", group = "[N]otes" },
 			{ "<leader>s", group = "[S]earch" },
+			{ "<leader>m", group = "[M]ini Sessions" },
 			{ "<leader>t", group = "[T]oggle" },
 			{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
 		},

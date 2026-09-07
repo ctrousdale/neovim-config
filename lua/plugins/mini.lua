@@ -1,5 +1,31 @@
 return { -- Collection of various small independent plugins/modules
 	"echasnovski/mini.nvim",
+	keys = {
+		{
+			"<leader>ms",
+			function()
+				require("mini.sessions").select("read")
+			end,
+			desc = "[S]essions: [S]elect/load",
+		},
+		{
+			"<leader>mw",
+			function()
+				local name = vim.fn.input("Session name: ")
+				if name ~= "" then
+					require("mini.sessions").write(name, { force = true })
+				end
+			end,
+			desc = "[S]essions: [W]rite",
+		},
+		{
+			"<leader>md",
+			function()
+				require("mini.sessions").select("delete")
+			end,
+			desc = "[S]essions: [D]elete",
+		},
+	},
 	config = function()
 		-- Better Around/Inside textobjects
 		--
@@ -18,19 +44,6 @@ return { -- Collection of various small independent plugins/modules
 			autowrite = true,
 			file = "",
 		})
-
-		vim.keymap.set("n", "<leader>ss", function()
-			sessions.select("read")
-		end, { desc = "[S]ession: [S]elect/load" })
-		vim.keymap.set("n", "<leader>sw", function()
-			local name = vim.fn.input("Session name: ")
-			if name ~= "" then
-				sessions.write(name, { force = true })
-			end
-		end, { desc = "[S]ession: [W]rite" })
-		vim.keymap.set("n", "<leader>sd", function()
-			sessions.select("delete")
-		end, { desc = "[S]ession: [D]elete" })
 
 		-- Add/delete/replace surroundings (brackets, quotes, etc.)
 		--
