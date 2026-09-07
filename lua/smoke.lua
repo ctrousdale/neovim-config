@@ -64,6 +64,40 @@ local function assert_plugin_keymaps()
 	end
 end
 
+local function assert_plugin_keymap_prefixes()
+	local mappings = {}
+
+	for _, entry in ipairs(plugin_specs()) do
+		for _, map in ipairs(entry.spec.keys or {}) do
+			for _, mode in ipairs(normalize_modes(map.mode)) do
+				table.insert(mappings, { mode = mode, keys = map[1], owner = entry.name })
+			end
+		end
+	end
+
+	for index, mapping in ipairs(mappings) do
+		for other_index, other_mapping in ipairs(mappings) do
+			if
+				index ~= other_index
+				and mapping.mode == other_mapping.mode
+				and other_mapping.keys:sub(1, #mapping.keys) == mapping.keys
+			then
+				error(
+					("plugin keymap %s|%s (%s) is a prefix of %s|%s (%s)")
+						:format(
+							mapping.mode,
+							mapping.keys,
+							mapping.owner,
+							other_mapping.mode,
+							other_mapping.keys,
+							other_mapping.owner
+						)
+				)
+			end
+		end
+	end
+end
+
 local function assert_language_registry()
 	local languages = require("config.languages")
 
@@ -145,6 +179,7 @@ function M.run()
 	local errors = {}
 	for _, check in ipairs({
 		assert_plugin_keymaps,
+		assert_plugin_keymap_prefixes,
 		assert_language_registry,
 		assert_format_policy,
 		assert_docker_filetypes,

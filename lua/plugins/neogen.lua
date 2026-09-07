@@ -4,28 +4,28 @@ return {
 	cmd = "Neogen",
 	keys = {
 		{
-			"<leader>ca",
+			"<leader>cn",
 			function()
 				require("neogen").generate()
 			end,
 			desc = "Code Annotation",
 		},
 		{
-			"<leader>cA",
+			"<leader>cN",
 			function()
 				require("neogen").generate({ type = "file" })
 			end,
 			desc = "File Annotation",
 		},
 		{
-			"<leader>cc",
+			"<leader>cC",
 			function()
 				require("neogen").generate({ type = "class" })
 			end,
 			desc = "Class Annotation",
 		},
 		{
-			"<leader>ct",
+			"<leader>cT",
 			function()
 				require("neogen").generate({ type = "type" })
 			end,
