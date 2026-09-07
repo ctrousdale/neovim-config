@@ -2,12 +2,25 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DOTFILES_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+CONFIG_SOURCE="$(realpath "$SCRIPT_DIR/..")"
+CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+CONFIG_TARGET="$CONFIG_HOME/nvim"
 
-mkdir -p "$HOME/.config"
-rm -rf "$HOME/.config/nvim"
-ln -sfn "$DOTFILES_DIR" "$HOME/.config/nvim"
+mkdir -p "$CONFIG_HOME"
 
-# if command -v nvim >/dev/null 2>&1; then
-#   nvim --headless '+Lazy! sync' +qa || true
-# fi
+if [[ -L "$CONFIG_TARGET" ]]; then
+  if [[ "$(realpath -m "$CONFIG_TARGET")" == "$CONFIG_SOURCE" ]]; then
+    printf 'Neovim configuration is already linked at %s\n' "$CONFIG_TARGET"
+    exit 0
+  fi
+
+  printf 'Refusing to replace existing Neovim configuration symlink: %s\n' "$CONFIG_TARGET" >&2
+  exit 1
+fi
+
+if [[ -e "$CONFIG_TARGET" ]]; then
+  printf 'Refusing to replace existing Neovim configuration: %s\n' "$CONFIG_TARGET" >&2
+  exit 1
+fi
+
+ln -s "$CONFIG_SOURCE" "$CONFIG_TARGET"
