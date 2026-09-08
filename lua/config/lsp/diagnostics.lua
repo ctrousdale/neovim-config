@@ -27,6 +27,7 @@ function M.setup()
 		virtual_text = {
 			source = "if_many",
 			spacing = 2,
+			virt_text_pos = "eol_right_align",
 			format = format_virtual_text,
 		},
 	})
