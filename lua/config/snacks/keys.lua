@@ -297,7 +297,7 @@ function M.get()
 			desc = "Rename File",
 		},
 		{
-			"<leader>gB",
+			"<leader>gO",
 			function()
 				Snacks.gitbrowse()
 			end,
