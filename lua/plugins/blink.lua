@@ -1,12 +1,15 @@
 return { -- Autocompletion
   'saghen/blink.cmp',
+  branch = 'main',
   event = 'VimEnter',
-  version = '1.*',
+  build = function()
+    require('blink.cmp').build():pwait()
+  end,
   dependencies = {
+    'saghen/blink.lib',
     -- Snippet Engine
     {
       'L3MON4D3/LuaSnip',
-      version = '2.*',
       build = (function()
         -- Build Step is needed for regex support in snippets.
         -- This step is not supported in many windows environments.
@@ -92,14 +95,11 @@ return { -- Autocompletion
 
     snippets = { preset = 'luasnip' },
 
-    -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
-    -- which automatically downloads a prebuilt binary when enabled.
-    --
-    -- By default, we use the Lua implementation instead, but you may enable
-    -- the rust implementation via `'prefer_rust_with_warning'`
+    -- Blink.cmp's recommended Rust fuzzy matcher provides typo resistance,
+    -- proximity/frecency bonuses, and better performance on large lists.
     --
     -- See :h blink-cmp-config-fuzzy for more information
-    fuzzy = { implementation = 'lua' },
+    fuzzy = { implementation = 'rust' },
 
     -- Shows a signature help window while you type arguments for a function
     signature = { enabled = true },
