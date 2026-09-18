@@ -11,6 +11,7 @@ function M.get()
 					pane = 2,
 					section = "terminal",
 					cmd = "colorscript -e square",
+					enabled = vim.fn.executable("colorscript") == 1,
 					height = 5,
 					padding = 1,
 				},
@@ -30,7 +31,7 @@ function M.get()
 					local cmds = {
 						{
 							title = "Notifications",
-							cmd = "gh notify -s -a -n5",
+							cmd = "gh status",
 							action = function()
 								vim.ui.open("https://github.com/notifications")
 							end,
