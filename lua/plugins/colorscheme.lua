@@ -1,19 +1,16 @@
 return {
-	"rebelot/kanagawa.nvim",
+	"EdenEast/nightfox.nvim",
 	lazy = false,
 	priority = 1000,
 	build = false,
 	config = function()
 		vim.opt.background = "dark"
-		require("kanagawa").setup({
-			transparent = true,
-			theme = "dragon",
-			background = {
-				dark = "dragon",
-				light = "lotus",
+		require("nightfox").setup({
+			options = {
+				transparent = true,
 			},
 		})
-		vim.cmd.colorscheme("kanagawa-dragon")
+		vim.cmd.colorscheme("carbonfox")
 
 		vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 		vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
